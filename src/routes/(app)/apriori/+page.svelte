@@ -154,4 +154,48 @@
 			</CardContainer>
 		{/each}
 	{/if}
+	{#if form?.rules}
+		<div class="lg:col-span-2">
+			<CardContainer title="hasil algoritma apriori">
+				<div class="grid gap-8">
+					{#each Object.keys(form.rules) as key, index}
+						<div class="overflow-x-auto">
+							<span class="text-lg font-thin font-mono">[ {key} ]</span>
+							<table class="table w-full">
+								<colgroup>
+									<col class="w-auto">
+									<col class="w-full">
+									<col class="w-auto">
+									<col class="w-auto">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>aturan asosiatif (A -> B)</th>
+										<th>support AUB</th>
+										<th>support A</th>
+										<th>confidence</th>
+									</tr>
+								</thead>
+								<tbody>
+									{#each form.rules[key] as rule, i}
+										<tr>
+											<th>{i + 1}</th>
+											<td>{rule.x}  ->  {rule.y}</td>
+											<td>{rule.supportXUY} %</td>
+											<td>{rule.supportX} %</td>
+											<td>{rule.confidence} %</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+						</div>
+						{#if (Object.keys(form.rules).length - index) > 1}
+							<div class="divider"></div>
+						{/if}
+					{/each}
+				</div>
+			</CardContainer>
+		</div>
+	{/if}
 </div>

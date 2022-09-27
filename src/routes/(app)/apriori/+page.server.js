@@ -71,14 +71,14 @@ export let actions = {
 			return itemset
 		})
 
-		const {iterations} = await apriori(itemsetList, support)
-		console.log(iterations)
+		const {iterations, rules} = await apriori(itemsetList, support, confidence)
 
 		return {
 			from: toHTMLDate(from),
 			to: toHTMLDate(to),
 			support,
 			confidence,
+			rules,
 			iterations,
 			transactions: _transactions,
 		}
