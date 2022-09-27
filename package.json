@@ -20,6 +20,7 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^4.3.1",
-		"daisyui": "^2.31.0"
+		"daisyui": "^2.31.0",
+		"node-apriori": "^1.0.0"
 	}
 }

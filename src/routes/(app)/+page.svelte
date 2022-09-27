@@ -73,7 +73,7 @@
 									{/if}
 								</form>
 							</Td>
-							<Td>{ toHTMLDate(+transaction.createdAt) }</Td>
+							<Td>{ toHTMLDate(transaction.createdAt) }</Td>
 							<Td>{ transaction.items.join(', ') }</Td>
 						</Tr>
 					{:else}

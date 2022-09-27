@@ -8,9 +8,15 @@
   export let value = ''
   export let name
   export let disabled = false
+  export let min
+  export let max
 
   function typeAction(node) {
     node.type = type;
+    if(type == 'number') {
+      node.min = min
+      node.max = max
+    }
   }
 
   export let id = crypto.randomUUID()
@@ -25,7 +31,7 @@
   <input 
     {placeholder} 
     {required}
-    {value}
+    bind:value
     {name}
     {id}
     {disabled} 

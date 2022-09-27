@@ -19,7 +19,7 @@ export async function load() {
 			},
 
 			orderBy: {
-				createdAt: 'asc'
+				createdAt: 'desc'
 			},
 		}),
 		client.product.findMany({
@@ -35,7 +35,7 @@ export async function load() {
 			items.sort((a, b) => a < b ? -1:1)
 			return {
 				id: transaction.id,
-				createdAt: +transaction.createdAt,
+				createdAt: transaction.createdAt,
 				items,
 			}
 		}),
@@ -59,6 +59,6 @@ export const actions = {
 
 		if(!deleted) return error(500)
 
-		return {success: true, deleted}
+		return {success: true}
 	}
 }

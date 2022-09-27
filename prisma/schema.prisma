@@ -18,7 +18,7 @@ model Product {
 
 model Transaction {
   id               String            @id @default(uuid())
-  createdAt        String
+  createdAt        DateTime
   transactionItems TransactionItem[]
 }
 

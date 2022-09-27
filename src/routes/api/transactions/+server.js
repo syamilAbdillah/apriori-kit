@@ -3,7 +3,7 @@ import client from '$lib/prisma'
 
 export async function POST({ request }) {
 	const payload = await request.json()
-	let createdAt = String(new Date(payload.createdAt).getTime())
+	let createdAt = new Date(payload.createdAt)
 	let id = crypto.randomUUID()
 
 	const transactionItems = payload

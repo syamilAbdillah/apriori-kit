@@ -39,7 +39,7 @@
       </div>
     </main>
 
-    <footer class="py-6 border">
+    <footer class="py-6 px-4 border">
       <div class="container mx-auto flex justify-between items-center">
         <span class="text-gray-400 font-thin text-xs">Sistem informasi penjualan pada Piala Liemo’s Trophy menggunakan algoritma Apriori</span>
         <span class="text-gray-400 text-sm font-thin">NAMA | NIM</span>
