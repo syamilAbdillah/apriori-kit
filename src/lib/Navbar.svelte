@@ -17,5 +17,8 @@
         <slot name="item"/>
       </ul>
     </div>
+    <div class="flex-none hidden lg:block">
+      <slot name="logout" />
+    </div>
   </div>
 </div>

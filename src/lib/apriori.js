@@ -14,6 +14,8 @@ export default (itemsetList, minSupport, minConfidence) => new Promise((resolve,
 		// console.log(`${support} = ${frequent} / ${itemsetList.length} * 100`)
 
 		if(support < minSupport) return;
+		if(minSupport == 0) return;
+		
 		items.sort()
 		const itemset = items.join(',')
 		const nIteration = items.length - 1

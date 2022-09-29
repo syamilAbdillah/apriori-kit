@@ -13,5 +13,8 @@
       <li><a href="/">Sidebar Item 1</a></li>
       <li><a href="/">Sidebar Item 2</a></li>
     </slot>
+    <li>
+      <slot name="logout"></slot>
+    </li>
   </ul>
 </div>

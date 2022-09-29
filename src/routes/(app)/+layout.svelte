@@ -13,6 +13,7 @@
   const menu = [
     {label: 'data penjualan', href: '/'},
     {label: 'data produk', href: '/produk'},
+    {label: 'data pengguna', href: '/pengguna'},
     {label: 'analisa apriori', href: '/apriori'},
   ]
 </script>
@@ -30,6 +31,10 @@
           <NavbarItem href={item.href}>{item.label}</NavbarItem>
         {/each}
       </svelte:fragment>
+      <form slot="logout" action="/logout" method="POST" class="inline-flex">
+        <input type="hidden" name="action" value="delete">
+        <button class="btn" type="submit">logout</button>
+      </form>
     </Navbar>
 
     <main class="container mx-auto">
@@ -57,6 +62,10 @@
         <SidebarItem href={item.href}>{item.label}</SidebarItem>
       {/each}
     </svelte:fragment>
+    <form slot="logout" action="/logout" method="POST" class="inline-flex">
+      <input type="hidden" name="action" value="delete">
+      <button type="submit">logout</button>
+    </form>
   </Sidebar>
 
 </div>

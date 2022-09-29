@@ -31,7 +31,7 @@
   <input 
     {placeholder} 
     {required}
-    bind:value
+    bind:value={value}
     {name}
     {id}
     {disabled} 

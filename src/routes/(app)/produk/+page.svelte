@@ -3,10 +3,6 @@
 	import { invalidateAll } from '$app/navigation'
 	import CardContainer from '$lib/CardContainer.svelte'
 	import TextInput from '$lib/TextInput.svelte'
-	import Table from '$lib/Table.svelte'
-	import Thead from '$lib/Thead.svelte'
-	import Tr from '$lib/Tr.svelte'
-	import Td from '$lib/Td.svelte'
 
 	export let data
 	export let form
@@ -86,47 +82,53 @@
 
 	<div>
 		<CardContainer>
-			<Table>
-				<colgroup slot="colgroup">
-					<col class="w-auto">
-					<col class="w-full">
-				</colgroup>
-				<svelte:fragment slot="head">
-					<Thead cols={['aksi', 'nama produk']} />
-				</svelte:fragment>
-				<tbody slot="body">
-					{#each data.products as product, index (product.id)}
-						<Tr>
-							<Td class="border">
-								<form 
-									method="POST"
-									action="?/delete"
-									use:enhance={deleteAction}
-									class="inline-flex" 
-								>
-									<input type="hidden" name="id" value={product.id}>
-									{#if deleteLoading == product.id}
-										<button class="btn loading" disabled>loading</button>
-									{:else}
-										<button class="btn btn-primary btn-sm" type="submit">
-											hapus
-										</button>
-									{/if}
-								</form>
-							</Td>
-							<Td class="border">{product.name}</Td>
-						</Tr>
-					{:else}
+			<div class="overflow-x-auto">
+				<table class="table w-full">
+					<colgroup>
+						<col class="w-auto">
+						<col class="w-full">
+					</colgroup>
+					<thead>
 						<tr>
-							<Td colspan="2">
-								<div class="p-4 w-full flex justify-center items-center">
-									<span class="text-2xl text-base-300">belum ada data</span>
-								</div>
-							</Td>
+							<th>aksi</th>
+							<th>nama produk</th>
 						</tr>
-					{/each}
-				</tbody>
-			</Table>
+					</thead>
+					<tbody>
+						{#each data.products as product, index (product.id)}
+							<tr>
+								<td>
+									<form 
+										method="POST"
+										action="?/delete"
+										use:enhance={deleteAction}
+										class="inline-flex" 
+									>
+										<input type="hidden" name="id" value={product.id}>
+										{#if deleteLoading == product.id}
+											<button class="btn loading" disabled>loading</button>
+										{:else}
+											<button class="btn btn-primary btn-sm" type="submit">
+												hapus
+											</button>
+										{/if}
+									</form>
+								</td>
+								<td>{product.name}</td>
+							</tr>
+						{:else}
+							<tr>
+								<td colspan="2">
+									<div class="p-4 w-full flex justify-center items-center">
+										<span class="text-2xl text-base-300">belum ada data</span>
+									</div>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+				
+			</div>
 		</CardContainer>
 	</div>
 </div>
