@@ -11,13 +11,13 @@
   export let min
   export let max
 
-  function typeAction(node) {
-    node.type = type;
-    if(type == 'number') {
-      node.min = min
-      node.max = max
-    }
-  }
+  // function typeAction(node) {
+  //   node.type = type;
+  //   if(type == 'number') {
+  //     node.min = min
+  //     node.max = max
+  //   }
+  // }
 
   export let id = crypto.randomUUID()
 </script>
@@ -31,14 +31,16 @@
   <input 
     {placeholder} 
     {required}
-    bind:value={value}
+    {value}
     {name}
     {id}
     {disabled} 
+    {type}
+    {max}
+    {min}
     autocomplete="{type == 'password' ? 'off': 'on'}" 
     class="input input-bordered w-full" 
     class:input-error={error}
-    use:typeAction 
   />
   
   {#if error}
