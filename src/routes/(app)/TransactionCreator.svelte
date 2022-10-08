@@ -72,7 +72,8 @@
 		<div class="lg:col-span-1 lg:row-span-2">
 			<TextInput 
 				type="date"
-				bind:value={date}
+				value={date}
+				on:change={(e) => date = e.target.value}
 				label="tanggal transaksi"
 			/>
 		</div>
