@@ -78,7 +78,9 @@
 		</CardContainer>
 	</div>
 	{#if loading}
-		<button class="btn btn-lg btn-circle loading btn-primary mx-auto"></button>
+		<div class="lg:col-span-2 flex justify-center">
+			<button class="btn btn-lg btn-circle loading btn-primary"></button>
+		</div>
 	{/if}
 
 	{#if form?.transactions}

@@ -1,7 +1,8 @@
 import client from '$lib/prisma'
 import { invalid, error } from '@sveltejs/kit'
+import { loggedInOnly } from '$lib/guard'
 
-export async function load() {
+async function _load() {
 	const [transactions, products] = await Promise.all([
 		client.transaction.findMany({
 			select: {
@@ -42,23 +43,25 @@ export async function load() {
 		products,
 	}
 }
+async function _delete({ request }) {
+	const form = await request.formData()
+	const id = form.get('id')
+	const exists = await client.transaction.findUnique({
+		where: {id}
+	})
 
+	if(!exists) return invalid(404, {id, errors: {id: 'transaction not found'}})
+
+	const deleted = await client.transaction.delete({
+		where: {id}
+	})
+
+	if(!deleted) return error(500)
+
+	return {success: true}
+}
+
+export const load = loggedInOnly(_load)
 export const actions = {
-	async delete({ request }) {
-		const form = await request.formData()
-		const id = form.get('id')
-		const exists = await client.transaction.findUnique({
-			where: {id}
-		})
-
-		if(!exists) return invalid(404, {id, errors: {id: 'transaction not found'}})
-
-		const deleted = await client.transaction.delete({
-			where: {id}
-		})
-
-		if(!deleted) return error(500)
-
-		return {success: true}
-	}
+	delete: loggedInOnly(_delete)
 }

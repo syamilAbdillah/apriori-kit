@@ -12,16 +12,10 @@ async function logger({ event, resolve }) {
 }
 
 async function authentication({ event, resolve }) {
-	const redirect = to => Response.redirect(event.url.origin + to)
 	const sessionId = event.cookies.get('session_id')
-	const isLogin = event.url.pathname == '/login'
 
-	if(isLogin && !sessionId) {
+	if(!sessionId) {
 		return resolve(event)
-	}
-
-	if(!isLogin && !sessionId) {
-		return redirect('/login')
 	}
 
 	const session = await client.session.findUnique({
@@ -31,12 +25,8 @@ async function authentication({ event, resolve }) {
 		}
 	})
 
-	if(isLogin && session) {
-		return redirect('/')
-	}
-
-	if(!isLogin && !session) {
-		return redirect('/login')
+	if(!session) {
+		return resolve(event)
 	}
 
 	event.locals.user = session?.user

@@ -1,7 +1,8 @@
 import { error, invalid } from '@sveltejs/kit'
 import client from '$lib/prisma'
+import { loggedInOnly } from '$lib/guard'
 
-export async function load() {
+async function _load() {
 	const products = await client.product.findMany({
 		orderBy: {
 			name: 'asc'
@@ -11,79 +12,84 @@ export async function load() {
 	return { products }
 }
 
-export const actions = {
-	async create({ request }) {
-		const form = await request.formData()
-		let name = form.get('name')
-		let id = crypto.randomUUID()
+async function _create({ request }) {
+	const form = await request.formData()
+	let name = form.get('name')
+	let id = crypto.randomUUID()
 
-		// validation
-		name = superTrim(name).toLowerCase()
-		if(name.length < 1) {
-			return invalid(422, {
-				name,
-				errors: {
-					name: 'nama produk tidak boleh kosong !!'
-				}
-			})
-		}
-
-		const exists = await client.product.findUnique({
-			where: {name}
+	// validation
+	name = superTrim(name).toLowerCase()
+	if(name.length < 1) {
+		return invalid(422, {
+			name,
+			errors: {
+				name: 'nama produk tidak boleh kosong !!'
+			}
 		})
+	}
 
-		if(exists) {
-			console.log('invalid violate unique contstraint')
-			return invalid(422, {
-				name,
-				errors: {
-					name: `"${name}" telah digunakan, silahkan pilih nama produk yang unik`,
-				}
-			})
-		}
+	const exists = await client.product.findUnique({
+		where: {name}
+	})
 
-
-		// perisiting to db
-		const result = await client.product.create({
-			data: {id, name}
+	if(exists) {
+		console.log('invalid violate unique contstraint')
+		return invalid(422, {
+			name,
+			errors: {
+				name: `"${name}" telah digunakan, silahkan pilih nama produk yang unik`,
+			}
 		})
+	}
 
-		return {result}
-	},
-	async delete({ request }) {
-		const form = await request.formData()
-		const id = form.get('id')
 
-		const exists = await client.transactionItem.findFirst({
-			where: {
-				productId: id,
-			},
+	// perisiting to db
+	const result = await client.product.create({
+		data: {id, name}
+	})
+
+	return {result}
+}
+
+async function _delete({ request }) {
+	const form = await request.formData()
+	const id = form.get('id')
+
+	const exists = await client.transactionItem.findFirst({
+		where: {
+			productId: id,
+		},
+	})
+
+	if(exists) {
+		return invalid(422, {
+			id, 
+			errors: {
+				product: `produk "${exists.name}" telah digunakan dalam transaksi, tolong hapus transaksi tersebut terlebih dahulu`
+			}
 		})
+	} 
 
-		if(exists) {
-			return invalid(422, {
-				id, 
-				errors: {
-					product: `produk "${exists.name}" telah digunakan dalam transaksi, tolong hapus transaksi tersebut terlebih dahulu`
-				}
-			})
-		} 
+	const deletedProduct = await client.product.delete({
+		where: {id}
+	})
 
-		const deletedProduct = await client.product.delete({
-			where: {id}
-		})
+	if(!deletedProduct) {
+		throw error(500)
+	}
 
-		if(!deletedProduct) {
-			throw error(500)
-		}
-
-		return {
-			product: deletedProduct,
-			success: true,
-		}
-	},
+	return {
+		product: deletedProduct,
+		success: true,
+	}
 }
 
 function superTrim(str) {
 	return str.split(' ').filter(word => word.length > 0).join(' ')
+}
+
+export const load = loggedInOnly(_load)
+export const actions = {
+	create: loggedInOnly(_create),
+	delete: loggedInOnly(_delete),
 }

@@ -1,7 +1,8 @@
 import { json } from '@sveltejs/kit'
 import client from '$lib/prisma'
+import {loggedInOnlyAPI} from '$lib/guard'
 
-export async function POST({ request }) {
+async function _POST({ request }) {
 	const payload = await request.json()
 	let createdAt = new Date(payload.createdAt)
 	let id = crypto.randomUUID()
@@ -24,3 +25,6 @@ export async function POST({ request }) {
 
 	return json(result)
 }
+
+
+export const POST = loggedInOnlyAPI(_POST)
